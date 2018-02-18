@@ -44,6 +44,9 @@
 #include <stdio.h>
 #include <string.h>
 
+#include "cli.h"
+#include "led_blink.h"
+
 /* USER CODE END Includes */
 
 /* Private variables ---------------------------------------------------------*/
@@ -56,22 +59,6 @@ UART_HandleTypeDef huart1;
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
 
-#define ABS_PULSE_RATIO_FL 13.74484598968620000000
-#define ABS_PULSE_RATIO_FR 13.74484598968620000000
-#define ABS_PULSE_RATIO_DIFF 13.74484598968620000000
-
-#define COMMAND_BUFFER_SIZE 80
-
-uint32_t uptime = 0;
-
-uint8_t LED_State = 0;
-uint32_t time_led_on = 0;
-uint32_t time_led_off = 0;
-uint32_t time_hello = 0;
-
-uint8_t rx_command_buffer[COMMAND_BUFFER_SIZE];
-uint8_t rx_command_buffer_i = 0;
-uint8_t rx_c;
 
 /* USER CODE END PV */
 
@@ -90,13 +77,6 @@ void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
 /* USER CODE BEGIN PFP */
 /* Private function prototypes -----------------------------------------------*/
 
-#ifdef __GNUC__
-/* With GCC, small printf (option LD Linker->Libraries->Small printf
-   set to 'Yes') calls __io_putchar() */
-	#define PUTCHAR_PROTOTYPE int __io_putchar(int ch)
-#else
-	#define PUTCHAR_PROTOTYPE int fputc(int ch, FILE *f)
-#endif /* __GNUC__ */
 
 /* USER CODE END PFP */
 
@@ -189,47 +169,9 @@ int main(void)
   /* USER CODE BEGIN 3 */
 
 	  // Blink LED -> we can see it's alive
-	  uint32_t time_now = HAL_GetTick();
-	  if( LED_State == 0 && ( (time_now - time_led_off) >= 900 ) )
-	  {
-		  HAL_GPIO_WritePin(GreenLED_GPIO_Port, GreenLED_Pin, GPIO_PIN_RESET);	// Led on
-		  time_led_on = time_now;
-		  LED_State = 1;
-	  }
-	  if( LED_State == 1 && ( (time_now - time_led_on) >= 100 ) )
-	  {
-		  HAL_GPIO_WritePin(GreenLED_GPIO_Port, GreenLED_Pin, GPIO_PIN_SET);	// Led off
-		  time_led_off = time_now;
-		  LED_State = 0;
-	  }
+	  LedBlink_run();
 
-	  if( HAL_UART_Receive (&huart1, (uint8_t *)&rx_c, 1, 10) == HAL_OK )
-	  {
-		  if(rx_command_buffer_i < COMMAND_BUFFER_SIZE)
-		  {
-			  rx_command_buffer[rx_command_buffer_i++] = rx_c;
-			  if(rx_c == '\n')
-			  {
-				  rx_command_buffer[rx_command_buffer_i] = 0;
-
-				  printf("Command: %s", rx_command_buffer);
-
-				  rx_command_buffer_i = 0;
-			  }
-		  }
-		  else
-		  {
-			  rx_command_buffer_i = 0;
-		  }
-	  }
-
-
-	  if( (time_now - time_hello) >= 10000 )
-	  {
-		  time_hello = time_now;
-		  printf("Uptime: %u sec\n\r", 10 * ++uptime);
-	  }
-
+	  CLI_run();
 
   }
   /* USER CODE END 3 */

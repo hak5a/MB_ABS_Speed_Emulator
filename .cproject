@@ -28,7 +28,7 @@
 								<option id="com.atollic.truestudio.common_options.target.endianess.1608144567" name="Endianess" superClass="com.atollic.truestudio.common_options.target.endianess" value="com.atollic.truestudio.common_options.target.endianess.little" valueType="enumerated"/>
 								<option id="com.atollic.truestudio.common_options.target.mcpu.286463162" name="Microcontroller" superClass="com.atollic.truestudio.common_options.target.mcpu" value="STM32F103C8" valueType="enumerated"/>
 								<option id="com.atollic.truestudio.common_options.target.instr_set.2033833414" name="Instruction set" superClass="com.atollic.truestudio.common_options.target.instr_set" value="com.atollic.truestudio.common_options.target.instr_set.thumb2" valueType="enumerated"/>
-								<option id="com.atollic.truestudio.as.general.incpath.770237934" name="Include path" superClass="com.atollic.truestudio.as.general.incpath" useByScannerDiscovery="false" valueType="includePath"/>
+								<option id="com.atollic.truestudio.as.general.incpath.770237934" name="Include path" superClass="com.atollic.truestudio.as.general.incpath" useByScannerDiscovery="false"/>
 								<option id="com.atollic.truestudio.gcc.symbols.defined.1670122205" name="Defined symbols" superClass="com.atollic.truestudio.gcc.symbols.defined"/>
 								<option id="com.atollic.truestudio.as.general.otherflags.51384659" name="Other options" superClass="com.atollic.truestudio.as.general.otherflags" value="" valueType="string"/>
 								<option id="com.atollic.truestudio.as.general.warnings.1324541152" name="Suppress warnings " superClass="com.atollic.truestudio.as.general.warnings" value="true" valueType="boolean"/>
@@ -38,11 +38,11 @@
 							</tool>
 							<tool command="arm-atollic-eabi-gcc -c " commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG}${OUTPUT_PREFIX} ${OUTPUT} ${INPUTS}" id="com.atollic.truestudio.exe.debug.toolchain.gcc.1836874447" name="C Compiler" superClass="com.atollic.truestudio.exe.debug.toolchain.gcc">
 								<option id="com.atollic.truestudio.gcc.directories.select.330946435" name="Include path" superClass="com.atollic.truestudio.gcc.directories.select" useByScannerDiscovery="false" valueType="includePath">
-									<listOptionValue builtIn="false" value="../../../Inc"/>
-									<listOptionValue builtIn="false" value="../../../Drivers/STM32F1xx_HAL_Driver/Inc"/>
-									<listOptionValue builtIn="false" value="../../../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy"/>
-									<listOptionValue builtIn="false" value="../../../Drivers/CMSIS/Device/ST/STM32F1xx/Include"/>
-									<listOptionValue builtIn="false" value="../../../Drivers/CMSIS/Include"/>
+									<listOptionValue builtIn="false" value="../Inc"/>
+									<listOptionValue builtIn="false" value="../Drivers/STM32F1xx_HAL_Driver/Inc"/>
+									<listOptionValue builtIn="false" value="../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy"/>
+									<listOptionValue builtIn="false" value="../Drivers/CMSIS/Device/ST/STM32F1xx/Include"/>
+									<listOptionValue builtIn="false" value="../Drivers/CMSIS/Include"/>
 								</option>
 								<option id="com.atollic.truestudio.gcc.symbols.defined.1670122205" name="Defined symbols" superClass="com.atollic.truestudio.gcc.symbols.defined" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="__weak=&quot;__attribute__((weak))&quot;"/>
@@ -110,32 +110,6 @@
 							<inputType id="com.atollic.truestudio.gcc.input.1274347818" superClass="com.atollic.truestudio.gcc.input"/>
 						</tool>
 					</fileInfo>
-					<folderInfo id="com.atollic.truestudio.exe.debug.1518366166.1116515032" name="/" resourcePath="Application/User">
-						<toolChain id="com.atollic.truestudio.exe.debug.toolchain.1281492831" name="Atollic ARM Tools" superClass="com.atollic.truestudio.exe.debug.toolchain" unusedChildren="">
-							<option id="com.atollic.truestudio.general.runtimelib.849910402.315290521" name="Runtime Library" superClass="com.atollic.truestudio.general.runtimelib.849910402"/>
-							<option id="com.atollic.truestudio.toolchain_options.mcu.1317866382.1851731342" name="Microcontroller" superClass="com.atollic.truestudio.toolchain_options.mcu.1317866382"/>
-							<option id="com.atollic.truestudio.toolchain_options.vendor.1743729167.183536245" name="Vendor name" superClass="com.atollic.truestudio.toolchain_options.vendor.1743729167"/>
-							<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.ELF" id="com.atollic.truestudio.exe.debug.toolchain.platform" isAbstract="false" name="Debug platform" osList="all" superClass="com.atollic.truestudio.exe.debug.toolchain.platform"/>
-							<tool id="com.atollic.truestudio.exe.debug.toolchain.as.233989797" name="Assembler" superClass="com.atollic.truestudio.exe.debug.toolchain.as.1545899283">
-								<inputType id="com.atollic.truestudio.as.input.169019373" name="Input" superClass="com.atollic.truestudio.as.input"/>
-							</tool>
-							<tool id="com.atollic.truestudio.exe.debug.toolchain.gcc.1532502304" name="C Compiler" superClass="com.atollic.truestudio.exe.debug.toolchain.gcc.1836874447">
-								<option id="com.atollic.truestudio.gcc.directories.select.1079371704" name="Include path" superClass="com.atollic.truestudio.gcc.directories.select" useByScannerDiscovery="false" valueType="includePath">
-									<listOptionValue builtIn="false" value="../../../Inc"/>
-									<listOptionValue builtIn="false" value="../../../Drivers/STM32F1xx_HAL_Driver/Inc"/>
-									<listOptionValue builtIn="false" value="../../../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy"/>
-									<listOptionValue builtIn="false" value="../../../Drivers/CMSIS/Device/ST/STM32F1xx/Include"/>
-									<listOptionValue builtIn="false" value="../../../Drivers/CMSIS/Include"/>
-								</option>
-								<inputType id="com.atollic.truestudio.gcc.input.1526609872" superClass="com.atollic.truestudio.gcc.input"/>
-							</tool>
-							<tool id="com.atollic.truestudio.exe.debug.toolchain.ld.1081299784" name="C Linker" superClass="com.atollic.truestudio.exe.debug.toolchain.ld.1444973427"/>
-							<tool id="com.atollic.truestudio.exe.debug.toolchain.gpp.306859274" name="C++ Compiler" superClass="com.atollic.truestudio.exe.debug.toolchain.gpp.981298185"/>
-							<tool id="com.atollic.truestudio.exe.debug.toolchain.ldcc.1201460239" name="C++ Linker" superClass="com.atollic.truestudio.exe.debug.toolchain.ldcc.428260"/>
-							<tool id="com.atollic.truestudio.ar.base.1306427670" name="Archiver" superClass="com.atollic.truestudio.ar.base.631175905"/>
-							<tool id="com.atollic.truestudio.exe.debug.toolchain.secoutput.2027497993" name="Other" superClass="com.atollic.truestudio.exe.debug.toolchain.secoutput.839033486"/>
-						</toolChain>
-					</folderInfo>
 					<sourceEntries>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 					</sourceEntries>

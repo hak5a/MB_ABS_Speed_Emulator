@@ -67,6 +67,22 @@
 
 /* USER CODE BEGIN Private defines */
 
+#define ABS_PULSE_RATIO_FL 13.74484598968620000000
+#define ABS_PULSE_RATIO_FR 13.74484598968620000000
+#define ABS_PULSE_RATIO_DIFF 13.74484598968620000000
+
+
+
+
+#ifdef __GNUC__
+/* With GCC, small printf (option LD Linker->Libraries->Small printf
+   set to 'Yes') calls __io_putchar() */
+	#define PUTCHAR_PROTOTYPE int __io_putchar(int ch)
+#else
+	#define PUTCHAR_PROTOTYPE int fputc(int ch, FILE *f)
+#endif /* __GNUC__ */
+
+
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus
