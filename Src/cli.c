@@ -7,10 +7,10 @@
 
 /* Includes ------------------------------------------------------------------*/
 
-#include <stdio.h>
 #include "main.h"
 #include "stm32f1xx_hal.h"
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 /* Private defines -----------------------------------------------------------*/
@@ -26,18 +26,18 @@ extern UART_HandleTypeDef huart1;
 unsigned int uptime = 0;
 uint32_t time_uptime = 0;
 
-uint8_t rx_command_buffer[COMMAND_BUFFER_SIZE];
-uint8_t rx_command_buffer_i = 0;
+char rx_command_buffer[COMMAND_BUFFER_SIZE];
+unsigned char rx_command_buffer_i = 0;
 
 /* Private function prototypes -----------------------------------------------*/
 
-void CLI_Parse_Commands(uint8_t *command);
+void CLI_Parse_Commands(char *command);
 
 
 
 void CLI_run(void)
 {
-	uint8_t rx_c;
+	char rx_c;
 
 	if( HAL_UART_Receive (&huart1, (uint8_t *)&rx_c, 1, 10) == HAL_OK )
 	{
@@ -65,31 +65,60 @@ void CLI_run(void)
 	}
 }
 
-void CLI_Parse_Commands(uint8_t *full_command)
+void CLI_Parse_Commands(char *full_command)
 {
-	printf("Parse command... %s \n\r", full_command);
+	//printf("debug... Parse command... %s \n\n\ŋ\r", full_command);
 
-	char parsed_command[COMMAND_SIZE] = " ";
-	char parsed_attribute[ATTRIBUTE_SIZE] = " ";
+	char temp_str[COMMAND_BUFFER_SIZE];
+	char parsed_command[COMMAND_SIZE];
+	char parsed_attribute[ATTRIBUTE_SIZE];
 
-	size_t place_of_space = strcspn(full_command, " ");
-	printf("debug... place of space: %u\n\r", (unsigned int)place_of_space);
+    strcpy(temp_str, full_command);
+    char *token;
 
-	strncpy(parsed_command, full_command, place_of_space);
-    *(parsed_command+place_of_space) = NULL;
-	printf("debug... parsed command: %s\n\r", parsed_command);
+    /* get the first token */
+    token = strtok(temp_str, " \n");
+    if( token != NULL )
+        strcpy(parsed_command, token);
+    else
+        strcpy(parsed_command, " ");
+    /* get the second token */
+    token = strtok(NULL, " \n");
+    if( token != NULL )
+        strcpy(parsed_attribute, token);
+    else
+        strcpy(parsed_attribute, " ");
 
-	printf("debug full command size: %u\n\r", strlen(full_command));
-    if(strlen(full_command) > place_of_space)
+    //printf("debug... parsed command  : %s\n\r", parsed_command);
+    //printf("debug... parsed attribute: %s\n\r", parsed_attribute);
+    float temp_float;
+
+    if(strcmp(parsed_command, "hello") == 0)
     {
-        strcpy(parsed_attribute, full_command+place_of_space+1);
-        size_t place_of_end = strcspn(parsed_attribute, "\n");
-        printf("debug... place of end: %u\n\r", (unsigned int)place_of_end);
-        *(parsed_attribute+place_of_end) = NULL;
+        printf("Hello %s!\n\r", parsed_attribute);
     }
-    printf("debug parsed attribute: %s\n\r", parsed_attribute);
-
-
-
-
+    else if(strcmp(parsed_command, "speed_fl") == 0)
+    {
+        temp_float = atof(parsed_attribute);
+        printf("OK, Front Left speed is now %.1f km/h\n\r", temp_float);
+    }
+    else if(strcmp(parsed_command, "speed_fr") == 0)
+    {
+        temp_float = atof(parsed_attribute);
+        printf("OK, Front Right speed is now %.1f km/h\n\r", temp_float);
+    }
+    else if(strcmp(parsed_command, "speed_diff") == 0)
+    {
+        temp_float = atof(parsed_attribute);
+        printf("OK, Diff speed is now %.1f km/h\n\r", temp_float);
+    }
+    else
+    {
+        printf("\nSupported Commands:\n\r");
+        printf("  speed_fl [speed]\n\r");
+        printf("  speed_fr [speed]\n\r");
+        printf("  speed_diff [speed]\n\r");
+        printf("\n\r");
+    }
+    printf("\n\r");
 }

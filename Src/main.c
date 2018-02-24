@@ -158,6 +158,7 @@ int main(void)
   ps = (uint32_t)( (float)f_Sys_Clock / (float)period / f );
   __HAL_TIM_SET_PRESCALER(&htim3, ps);
 
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
