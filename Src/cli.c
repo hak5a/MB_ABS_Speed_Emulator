@@ -12,6 +12,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "pulse_generator.h"
 
 /* Private defines -----------------------------------------------------------*/
 
@@ -22,6 +23,11 @@
 /* Private variables ---------------------------------------------------------*/
 
 extern UART_HandleTypeDef huart1;
+
+extern TIM_HandleTypeDef htim1;
+extern TIM_HandleTypeDef htim2;
+extern TIM_HandleTypeDef htim3;
+
 
 unsigned int uptime = 0;
 uint32_t time_uptime = 0;
@@ -101,16 +107,19 @@ void CLI_Parse_Commands(char *full_command)
     {
         temp_float = atof(parsed_attribute);
         printf("OK, Front Left speed is now %.1f km/h\n\r", temp_float);
+        pulse_generator_set_speed_FL(temp_float);
     }
     else if(strcmp(parsed_command, "speed_fr") == 0)
     {
         temp_float = atof(parsed_attribute);
         printf("OK, Front Right speed is now %.1f km/h\n\r", temp_float);
+        pulse_generator_set_speed_FR(temp_float);
     }
     else if(strcmp(parsed_command, "speed_diff") == 0)
     {
         temp_float = atof(parsed_attribute);
         printf("OK, Diff speed is now %.1f km/h\n\r", temp_float);
+        pulse_generator_set_speed_DIFF(temp_float);
     }
     else
     {

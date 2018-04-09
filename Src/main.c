@@ -46,6 +46,7 @@
 
 #include "cli.h"
 #include "led_blink.h"
+#include "pulse_generator.h"
 
 /* USER CODE END Includes */
 
@@ -133,30 +134,18 @@ int main(void)
   MX_TIM2_Init();
   /* USER CODE BEGIN 2 */
 
-  HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
-  HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_1);
-  HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_1);
+  #define TIM_FRONT_LEFT  	&htim1
+  #define TIM_FRONT_RIGHT 	&htim2
+  #define TIM_DIFF			&htim3
 
-  uint32_t f_Sys_Clock = HAL_RCC_GetSysClockFreq();
-  uint32_t period = __HAL_TIM_GET_AUTORELOAD(&htim3);
 
-  float speed = 1;
-  float f = speed * ABS_PULSE_RATIO_DIFF;
+  HAL_TIM_PWM_Start(TIM_FRONT_LEFT,	 	TIM_CHANNEL_1);
+  HAL_TIM_PWM_Start(TIM_FRONT_RIGHT, 	TIM_CHANNEL_1);
+  HAL_TIM_PWM_Start(TIM_DIFF,			TIM_CHANNEL_1);
 
-  uint32_t ps;
-
-  speed = 0.123;
-  f = speed * ABS_PULSE_RATIO_DIFF;
-  ps = (uint32_t)( (float)f_Sys_Clock / (float)period / f );
-  __HAL_TIM_SET_PRESCALER(&htim1, ps);
-  speed = 0.234;
-  f = speed * ABS_PULSE_RATIO_DIFF;
-  ps = (uint32_t)( (float)f_Sys_Clock / (float)period / f );
-  __HAL_TIM_SET_PRESCALER(&htim2, ps);
-  speed = 0.456;
-  f = speed * ABS_PULSE_RATIO_DIFF;
-  ps = (uint32_t)( (float)f_Sys_Clock / (float)period / f );
-  __HAL_TIM_SET_PRESCALER(&htim3, ps);
+  pulse_generator_set_speed_FL(0.123);
+  pulse_generator_set_speed_FR(0.234);
+  pulse_generator_set_speed_DIFF(0.456);
 
 
   /* USER CODE END 2 */
