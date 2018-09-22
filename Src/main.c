@@ -44,6 +44,7 @@
 #include <stdio.h>
 #include <string.h>
 
+#include "eeprom.h"
 #include "cli.h"
 #include "led_blink.h"
 #include "pulse_generator.h"
@@ -78,6 +79,7 @@ void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
 /* USER CODE BEGIN PFP */
 /* Private function prototypes -----------------------------------------------*/
 
+extern void Restore_Settings(void);
 
 /* USER CODE END PFP */
 
@@ -117,6 +119,15 @@ int main(void)
 
   /* USER CODE BEGIN Init */
 
+  /* Unlock the Flash Program Erase controller */
+  HAL_FLASH_Unlock();
+
+  /* EEPROM Init */
+  EE_Init();
+
+  /* Lock the Flash Program Erase controller */
+  HAL_FLASH_Lock();
+
   /* USER CODE END Init */
 
   /* Configure the system clock */
@@ -143,9 +154,13 @@ int main(void)
   HAL_TIM_PWM_Start(TIM_FRONT_RIGHT, 	TIM_CHANNEL_1);
   HAL_TIM_PWM_Start(TIM_DIFF,			TIM_CHANNEL_1);
 
-  pulse_generator_set_speed_FL(0.123);
-  pulse_generator_set_speed_FR(0.234);
-  pulse_generator_set_speed_DIFF(0.456);
+
+//  pulse_generator_set_speed_FL(0.123);
+//  pulse_generator_set_speed_FR(0.234);
+//  pulse_generator_set_speed_DIFF(0.456);
+
+	// Restore some data from EEPROM
+	Restore_Settings();
 
 
   /* USER CODE END 2 */

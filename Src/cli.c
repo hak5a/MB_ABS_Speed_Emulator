@@ -13,6 +13,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "pulse_generator.h"
+#include "settings.h"
 
 /* Private defines -----------------------------------------------------------*/
 
@@ -28,6 +29,10 @@ extern TIM_HandleTypeDef htim1;
 extern TIM_HandleTypeDef htim2;
 extern TIM_HandleTypeDef htim3;
 
+extern struct abs_channel abs_channel_FL;
+extern struct abs_channel abs_channel_FR;
+extern struct abs_channel abs_channel_DIFF;
+
 
 unsigned int uptime = 0;
 uint32_t time_uptime = 0;
@@ -38,6 +43,10 @@ unsigned char rx_command_buffer_i = 0;
 /* Private function prototypes -----------------------------------------------*/
 
 void CLI_Parse_Commands(char *command);
+void Print_Settings(void);
+
+extern void Save_Settings(void);
+extern void Reset_Settings(void);
 
 
 
@@ -62,13 +71,14 @@ void CLI_run(void)
 		  rx_command_buffer_i = 0;
 	  }
 	}
-
+#if CLI_PRINT_UPTIME == 1
 	uint32_t time_now = HAL_GetTick();
 	if( (time_now - time_uptime) >= 10000 )
 	{
 	  time_uptime = time_now;
 	  printf("Uptime: %u sec\n\r", 10 * ++uptime);
 	}
+#endif
 }
 
 void CLI_Parse_Commands(char *full_command)
@@ -95,39 +105,88 @@ void CLI_Parse_Commands(char *full_command)
     else
         strcpy(parsed_attribute, " ");
 
-    //printf("debug... parsed command  : %s\n\r", parsed_command);
-    //printf("debug... parsed attribute: %s\n\r", parsed_attribute);
-    float temp_float;
-
+    // debug...
     if(strcmp(parsed_command, "hello") == 0)
     {
         printf("Hello %s!\n\r", parsed_attribute);
     }
+
+
     else if(strcmp(parsed_command, "speed_fl") == 0)
     {
-        temp_float = atof(parsed_attribute);
-        printf("OK, Front Left speed is now %.1f km/h\n\r", temp_float);
-        pulse_generator_set_speed_FL(temp_float);
+        abs_channel_FL.speed = atof(parsed_attribute);
+        printf("OK, Front Left speed is now %.1f km/h\n\r", abs_channel_FL.speed);
+        pulse_generator_set_speed_FL(abs_channel_FL.speed);
     }
     else if(strcmp(parsed_command, "speed_fr") == 0)
     {
-        temp_float = atof(parsed_attribute);
-        printf("OK, Front Right speed is now %.1f km/h\n\r", temp_float);
-        pulse_generator_set_speed_FR(temp_float);
+        abs_channel_FR.speed = atof(parsed_attribute);
+        printf("OK, Front Right speed is now %.1f km/h\n\r", abs_channel_FR.speed);
+        pulse_generator_set_speed_FR(abs_channel_FR.speed);
     }
     else if(strcmp(parsed_command, "speed_diff") == 0)
     {
-        temp_float = atof(parsed_attribute);
-        printf("OK, Diff speed is now %.1f km/h\n\r", temp_float);
-        pulse_generator_set_speed_DIFF(temp_float);
+        abs_channel_DIFF.speed = atof(parsed_attribute);
+        printf("OK, Diff speed is now %.1f km/h\n\r", abs_channel_DIFF.speed);
+        pulse_generator_set_speed_DIFF(abs_channel_DIFF.speed);
+    }
+    else if(strcmp(parsed_command, "save") == 0)
+    {
+    	Save_Settings();
+        printf("OK, All settings saved");
+    }
+    else if(strcmp(parsed_command, "pr_fl") == 0)
+    {
+    	abs_channel_FL.abs_pulse_ratio = atof(parsed_attribute);
+        printf("OK, Pulse Ratio is now %f\n\r", abs_channel_FL.abs_pulse_ratio);
+    }
+    else if(strcmp(parsed_command, "pr_fr") == 0)
+    {
+    	abs_channel_FR.abs_pulse_ratio = atof(parsed_attribute);
+        printf("OK, Pulse Ratio is now %f\n\r", abs_channel_FR.abs_pulse_ratio);
+    }
+    else if(strcmp(parsed_command, "pr_diff") == 0)
+    {
+    	abs_channel_DIFF.abs_pulse_ratio = atof(parsed_attribute);
+        printf("OK, Pulse Ratio is now %f\n\r", abs_channel_DIFF.abs_pulse_ratio);
+    }
+    else if(strcmp(parsed_command, "p") == 0)
+    {
+        Print_Settings();
+    }
+    else if(strcmp(parsed_command, "reset") == 0)
+    {
+    	Reset_Settings();
+    	printf("OK, Factory default settings restored (not saved!)\n\r");
     }
     else
     {
-        printf("\nSupported Commands:\n\r");
-        printf("  speed_fl [speed]\n\r");
-        printf("  speed_fr [speed]\n\r");
-        printf("  speed_diff [speed]\n\r");
-        printf("\n\r");
+    	printf("** MB 124 ABS ECU Emulator **\n\r");
+    	printf("Made by: hannu.kopsa@iki.fi\n\r");
+    	printf("Supported Commands:\n\r");
+        printf("  speed_fl    [speed]        : Set speed\n\r");
+        printf("  speed_fr    [speed]        : Set speed\n\r");
+        printf("  speed_diff  [speed]        : Set speed\n\r");
+        printf("  pr_fl       [pulse ratio]  : Set ABS sensor pulse ratio\n\r");
+        printf("  pr_fl       [pulse ratio]  : Set ABS sensor pulse ratio\n\r");
+        printf("  pr_fl       [pulse ratio]  : Set ABS sensor pulse ratio\n\r");
+        printf("  p                          : Print settings\n\r");
+        printf("  reset                      : Restore factory default settings\n\r");
+        printf("  save                       : Save all settings to memory\n\r");
     }
     printf("\n\r");
+}
+
+void Print_Settings(void)
+{
+    printf("\nSettings:\n\r");
+    printf("  ABS Pulse Ratio FL:   %f\n\r", abs_channel_FL.abs_pulse_ratio);
+    printf("  ABS Pulse Ratio FR:   %f\n\r", abs_channel_FR.abs_pulse_ratio);
+    printf("  ABS Pulse Ratio DIFF: %f\n\r", abs_channel_DIFF.abs_pulse_ratio);
+    printf("\n\r");
+    printf("  speed_fl:   %.1f km/h\n\r", abs_channel_FL.speed);
+    printf("  speed_fr:   %.1f km/h\n\r", abs_channel_FR.speed);
+    printf("  speed_diff: %.1f km/h\n\r", abs_channel_DIFF.speed);
+    printf("\n\r");
+
 }

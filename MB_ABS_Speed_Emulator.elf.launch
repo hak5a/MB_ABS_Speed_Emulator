@@ -28,7 +28,7 @@
 <stringAttribute key="com.atollic.hardwaredebug.launch.verifyCommands" value="# Set flash parallelism mode to 32, 16, or 8 bit when using STM32 F2/F4 microcontrollers&#13;&#10;# 2=32 bit, 1=16 bit and 0=8 bit parallelism mode&#13;&#10;monitor flash set_parallelism_mode 2&#13;&#10;&#13;&#10;# Load the program executable&#13;&#10;load&#9;&#9;&#13;&#10;&#13;&#10;# Enable Debug connection in low power modes (DBGMCU-&gt;CR)&#13;&#10;set *0xE0042004 = (*0xE0042004) | 0x7&#13;&#10;# The executable starts automatically"/>
 <booleanAttribute key="com.atollic.hardwaredebug.launch.verify_flash_download" value="true"/>
 <booleanAttribute key="com.atollic.hardwaredebug.stlink.enable_logging" value="false"/>
-<stringAttribute key="com.atollic.hardwaredebug.stlink.log_file" value="/home/hannu/Atollic/TrueSTUDIO/STM32_workspace_9.0/MB_ABS_Speed_Emulator//TrueSTUDIO/MB_ABS_Speed_Emulator\Debug\st-link_gdbserver_log.txt"/>
+<stringAttribute key="com.atollic.hardwaredebug.stlink.log_file" value="/home/hannu/Atollic/TrueSTUDIO/STM32_workspace_9.0/MB_ABS_Speed_Emulator//\Debug\st-link_gdbserver_log.txt"/>
 <booleanAttribute key="com.atollic.hardwaredebug.stlink.stlink_check_serial_number" value="false"/>
 <stringAttribute key="com.atollic.hardwaredebug.stlink.stlink_txt_serial_number" value=""/>
 <booleanAttribute key="com.atollic.hardwaredebug.stlink.verify_flash" value="false"/>
@@ -51,4 +51,5 @@
 </listAttribute>
 <stringAttribute key="org.eclipse.dsf.launch.MEMORY_BLOCKS" value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; standalone=&quot;no&quot;?&gt;&#10;&lt;memoryBlockExpressionList context=&quot;reserved-for-future-use&quot;/&gt;&#10;"/>
 <stringAttribute key="process_factory_id" value="org.eclipse.cdt.dsf.gdb.GdbProcessFactory"/>
+<stringAttribute key="saved_expressions&lt;seperator&gt;Unknown" value="0,0x08008000,EEdatafloat = 1.23456789;&#10;&#9;EEdata16bit_L = *((uint16_t*) &amp;EEdatafloat + 0);&#10;&#9;EEdata16bit_H = *((uint16_t*) &amp;EEdatafloat + 1);&#10;&#9;EE_WriteVariable(EEADDR_SPEED_FL_L, EEdata16bit_L);&#10;&#9;EE_WriteVariable(EEADDR_SPEED_FL_H, EEdata16bit_H);,0x8,0x08008400,0x08018000,800F800,F800,0x0800F800"/>
 </launchConfiguration>

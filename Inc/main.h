@@ -67,11 +67,8 @@
 
 /* USER CODE BEGIN Private defines */
 
-#define ABS_PULSE_RATIO_FL 13.74484598968620000000
-#define ABS_PULSE_RATIO_FR 13.74484598968620000000
-#define ABS_PULSE_RATIO_DIFF 13.74484598968620000000
-
-
+#define TRUE	1
+#define FALSE	0
 
 #ifdef __GNUC__
 /* With GCC, small printf (option LD Linker->Libraries->Small printf
