@@ -11,7 +11,7 @@
 **
 **  Environment : System Workbench for MCU
 **
-**  Distribution: The file is distributed “as is,” without any warranty
+**  Distribution: The file is distributed ï¿½as is,ï¿½ without any warranty
 **                of any kind.
 **
 **  (c)Copyright System Workbench for MCU.
@@ -35,6 +35,11 @@
 #include <sys/time.h>
 #include <sys/times.h>
 
+//#include "main.h"
+//#include "stm32f1xx_hal.h"
+//#include "usb_device.h"
+#include "usbd_cdc_if.h"
+#include "settings.h"
 
 /* Variables */
 //#undef errno
@@ -92,12 +97,16 @@ return len;
 
 int _write(int file, char *ptr, int len)
 {
+#if USB_SERIAL_PORT
+	while( CDC_Transmit_FS( (uint8_t *)ptr, len ) != USBD_OK );;
+#else
 	int DataIdx;
 
 	for (DataIdx = 0; DataIdx < len; DataIdx++)
 	{
 		__io_putchar(*ptr++);
 	}
+#endif
 	return len;
 }
 

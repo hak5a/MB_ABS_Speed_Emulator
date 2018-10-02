@@ -17,11 +17,11 @@
 
 /* Private defines -----------------------------------------------------------*/
 
-#define COMMAND_BUFFER_SIZE 20
+#define COMMAND_BUFFER_SIZE 100
 #define COMMAND_SIZE 		10
 #define ATTRIBUTE_SIZE		10
 
-/* Private variables ---------------------------------------------------------*/
+/* External variables --------------------------------------------------------*/
 
 extern UART_HandleTypeDef huart1;
 
@@ -33,12 +33,18 @@ extern struct abs_channel abs_channel_FL;
 extern struct abs_channel abs_channel_FR;
 extern struct abs_channel abs_channel_DIFF;
 
+/* Private variables ---------------------------------------------------------*/
 
 unsigned int uptime = 0;
 uint32_t time_uptime = 0;
 
 char rx_command_buffer[COMMAND_BUFFER_SIZE];
 unsigned char rx_command_buffer_i = 0;
+
+uint8_t USB_Serial_Buffer[COMMAND_BUFFER_SIZE];
+uint8_t USB_Serial_wp = 0;
+uint8_t USB_Serial_rp = 0;
+
 
 /* Private function prototypes -----------------------------------------------*/
 
@@ -48,13 +54,18 @@ void Print_Settings(void);
 extern void Save_Settings(void);
 extern void Reset_Settings(void);
 
+uint8_t USB_Serial_getchar(uint8_t *c);
 
 
 void CLI_run(void)
 {
-	char rx_c;
+	uint8_t rx_c;
 
-	if( HAL_UART_Receive (&huart1, (uint8_t *)&rx_c, 1, 10) == HAL_OK )
+#if USB_SERIAL_PORT
+	if( USB_Serial_getchar( &rx_c ) == 0 ) // if there is data it the buffer...
+#else
+	if( HAL_UART_Receive (&huart1, (uint8_t *)&rx_c, 1, 10) == HAL_OK ) // if there is data it the buffer...
+#endif
 	{
 	  if(rx_command_buffer_i < COMMAND_BUFFER_SIZE)
 	  {
@@ -189,4 +200,28 @@ void Print_Settings(void)
     printf("  speed_diff: %.1f km/h\n\r", abs_channel_DIFF.speed);
     printf("\n\r");
 
+}
+
+uint8_t USB_Serial_getchar(uint8_t *c)
+{
+	if(USB_Serial_rp == USB_Serial_wp)
+		return 1;	// No data
+
+	*c = USB_Serial_Buffer[USB_Serial_rp];
+
+	if( ++USB_Serial_rp >= COMMAND_BUFFER_SIZE )
+		USB_Serial_rp = 0;
+
+	return 0;
+}
+
+void USB_Serial_Push_to_CLIbuffer(uint8_t* Data, uint32_t *Len)
+{
+	for(uint8_t i=0; i<*Len; i++)
+	{
+		USB_Serial_Buffer[USB_Serial_wp++] = Data[i];
+
+		if( USB_Serial_wp >= COMMAND_BUFFER_SIZE )
+			USB_Serial_wp = 0;
+	}
 }
