@@ -12,7 +12,7 @@
 #define CLI_PRINT_UPTIME	0	// debug thing
 
 
-#define USB_SERIAL_PORT		1	//
+#define USB_SERIAL_PORT		0	//
 
 // Settings
 #define DEFAULT_ABS_PULSE_RATIO_FL 		13.74484598968620000000

@@ -123,23 +123,31 @@ void CLI_Parse_Commands(char *full_command)
     }
 
 
+    else if(strcmp(parsed_command, "speed_f") == 0)
+    {
+        abs_channel_FL.speed = atof(parsed_attribute);
+        abs_channel_FR.speed = abs_channel_FL.speed;
+        pulse_generator_set_speed_FL(abs_channel_FL.speed);
+        pulse_generator_set_speed_FR(abs_channel_FR.speed);
+        printf("OK, Front Left and Front Right speed is now %.1f km/h\n\r", abs_channel_FL.speed);
+    }
     else if(strcmp(parsed_command, "speed_fl") == 0)
     {
         abs_channel_FL.speed = atof(parsed_attribute);
-        printf("OK, Front Left speed is now %.1f km/h\n\r", abs_channel_FL.speed);
         pulse_generator_set_speed_FL(abs_channel_FL.speed);
+        printf("OK, Front Left speed is now %.1f km/h\n\r", abs_channel_FL.speed);
     }
     else if(strcmp(parsed_command, "speed_fr") == 0)
     {
         abs_channel_FR.speed = atof(parsed_attribute);
-        printf("OK, Front Right speed is now %.1f km/h\n\r", abs_channel_FR.speed);
         pulse_generator_set_speed_FR(abs_channel_FR.speed);
+        printf("OK, Front Right speed is now %.1f km/h\n\r", abs_channel_FR.speed);
     }
     else if(strcmp(parsed_command, "speed_diff") == 0)
     {
         abs_channel_DIFF.speed = atof(parsed_attribute);
-        printf("OK, Diff speed is now %.1f km/h\n\r", abs_channel_DIFF.speed);
         pulse_generator_set_speed_DIFF(abs_channel_DIFF.speed);
+        printf("OK, Diff speed is now %.1f km/h\n\r", abs_channel_DIFF.speed);
     }
     else if(strcmp(parsed_command, "save") == 0)
     {
@@ -175,6 +183,7 @@ void CLI_Parse_Commands(char *full_command)
     	printf("** MB 124 ABS ECU Emulator **\n\r");
     	printf("Made by: hannu.kopsa@iki.fi\n\r");
     	printf("Supported Commands:\n\r");
+        printf("  speed_f     [speed]        : Set speed\n\r");
         printf("  speed_fl    [speed]        : Set speed\n\r");
         printf("  speed_fr    [speed]        : Set speed\n\r");
         printf("  speed_diff  [speed]        : Set speed\n\r");
